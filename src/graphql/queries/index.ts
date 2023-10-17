@@ -33,3 +33,28 @@ export const GET_EVENT = gql`query Event($id:ID!){
       description
     }
   }`;
+
+export const GET_MEMBERS_OF_EVENT = gql`
+  query GetMembersOfEvent($eventID:ID!){
+  getMembersOfEvent(id:$eventID){
+    id
+    name
+    phoneNumber
+    role
+    email
+    
+  }
+}
+  `
+
+export const GET_SESSIONS_OF_EVENT = gql`
+  query GetEventSessions($id:ID!){
+  getEventSessions(id:$id){
+    id
+    name
+    startTime
+    endTime
+    description
+  }
+}
+  `
