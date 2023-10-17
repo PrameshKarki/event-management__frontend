@@ -21,3 +21,11 @@ mutation UserSignUp($data:UserInput!){
 }
 
 `
+
+export const CREATE_EVENT = gql`
+mutation CreateEvent($data:EventInput!){
+  createEvent(data:$data){
+    id
+  }
+}
+`

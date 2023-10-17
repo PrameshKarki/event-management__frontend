@@ -1,4 +1,3 @@
-"use client";
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { LOGIN_USER } from "../../graphql/mutations";
@@ -11,6 +10,11 @@ interface ILoginInput {
   email: string;
   password: string;
 }
+export interface User {
+  email: string;
+  id: string;
+  accessToken: string;
+}
 
 const Login = () => {
   const router = useRouter();
@@ -19,23 +23,32 @@ const Login = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<ILoginInput>();
   const [userLogin, { data, loading }] = useMutation(LOGIN_USER, {
     client: client,
   });
-  
-  if (data) {
-    // Handle auth context
-  }
 
   const loginHandler: SubmitHandler<ILoginInput> = async (data) => {
     try {
-      await userLogin({
+      const res = await userLogin({
         variables: {
           data,
         },
       });
+      if (res.data) {
+        toast({
+          title: "Success",
+          description: "Logged in successfully.",
+          variant: "success",
+        });
+        
+        reset({
+          email: "",
+          password: "",
+        });
+      }
     } catch (err: any) {
       toast({
         title: "Error",
