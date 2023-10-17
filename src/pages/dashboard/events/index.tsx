@@ -3,7 +3,7 @@ import DashboardLayout from "../Layout";
 import { useQuery } from "@apollo/client";
 import { GET_EVENTS, MY_EVENTS } from "../../../graphql/queries";
 import client from "../../../configs/graphql";
-import EventCard, { Event } from "../components/EventCard";
+import EventCard, { Event } from "../../../components/EventCard";
 
 const Events = () => {
   const { data, loading, error } = useQuery(MY_EVENTS, {

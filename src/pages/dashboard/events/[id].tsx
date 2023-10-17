@@ -12,25 +12,14 @@ import dayjs from "dayjs";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { CgDetailsMore } from "react-icons/cg";
-import { Event } from "../components/EventCard";
+import { Event } from "../../../components/EventCard";
 import Table from "../../../components/Table";
+import EventMembers from "../../../components/EventMembers";
+import EventSessions from "../../../components/EventSessions";
 
 const EventDetails = () => {
   const router = useRouter();
   const data = useQuery(GET_EVENT, {
-    client: client,
-    variables: {
-      id: router.query.id,
-    },
-  });
-
-  const members = useQuery(GET_MEMBERS_OF_EVENT, {
-    client: client,
-    variables: {
-      eventID: router.query.id,
-    },
-  });
-  const sessions = useQuery(GET_SESSIONS_OF_EVENT, {
     client: client,
     variables: {
       id: router.query.id,
@@ -56,22 +45,8 @@ const EventDetails = () => {
         <CgDetailsMore color="grey" />
         <p className="text-gray-600 text-sm">{event?.description}</p>
       </div>
-      <section className="member-section mt-4 shadow-md px-2 py-3 w-full">
-        <Table
-          data={members?.data?.getMembersOfEvent ?? []}
-          description="Members of event"
-          title="Members"
-          keysToExclude={["__typename"]}
-        />
-      </section>
-      <section className="member-section mt-4 shadow-md px-2 py-3 w-full">
-        <Table
-          data={sessions?.data?.getEventSessions ?? []}
-          description="Sessions of event"
-          title="Sessions"
-          keysToExclude={["__typename"]}
-        />
-      </section>
+      <EventMembers eventID={event?.id} />
+      <EventSessions eventID={event?.id} />
     </DashboardLayout>
   );
 };
