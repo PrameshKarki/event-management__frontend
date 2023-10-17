@@ -22,3 +22,14 @@ export const MY_EVENTS = gql`query MyEvents{
       location
     }
   }`
+
+export const GET_EVENT = gql`query Event($id:ID!){
+    event(id:$id){
+      id
+      name
+      startDate
+      endDate
+      location
+      description
+    }
+  }`;
