@@ -53,3 +53,12 @@ mutation AddMembersToTheEvent($id:ID!,$data:AddMemberInput!){
   addMembersToEvent(id:$id,data:$data)
 }
 `
+
+export const DELETE_EVENT = gql`
+mutation DeleteEvent($id:ID!){
+  deleteEvent(id:$id){
+    success
+    message
+  }
+}
+`

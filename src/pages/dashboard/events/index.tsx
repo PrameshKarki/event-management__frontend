@@ -18,7 +18,7 @@ const Events = () => {
       </p>
       <section className="flex flex-wrap gap-6">
         {data?.myEvents?.map((event: Event) => (
-          <EventCard event={event} />
+          <EventCard event={event} showActions={true} />
         ))}
       </section>
     </DashboardLayout>
