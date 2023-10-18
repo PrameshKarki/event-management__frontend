@@ -3,3 +3,9 @@ export enum ExpenseCategory {
     CATERING = 'CATERING',
     DECORATION = 'DECORATION',
 }
+
+export enum MemberRole {
+    ADMIN = "ADMIN",
+    CONTRIBUTOR = "CONTRIBUTOR",
+    ATTENDEE = "ATTENDEE"
+}

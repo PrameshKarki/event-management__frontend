@@ -2,6 +2,7 @@
 import Link from "next/link";
 
 import { AiOutlineMenu } from "react-icons/ai";
+import { BsPeople } from "react-icons/bs";
 import { GrFormAdd } from "react-icons/gr";
 
 const navigation = [
@@ -30,6 +31,11 @@ const navigation = [
         />
       </svg>
     ),
+  },
+  {
+    href: "/dashboard/members/add",
+    name: "Add Members",
+    icon: <BsPeople size={20} color="grey" />,
   },
   {
     href: "/dashboard/events/add",

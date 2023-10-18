@@ -7,9 +7,11 @@ import client from "../configs/graphql";
 const EventMembers = ({ eventID }: { eventID: string }) => {
   const members = useQuery(GET_MEMBERS_OF_EVENT, {
     client: client,
+    fetchPolicy:"network-only",
     variables: {
       eventID,
     },
+    
   });
 
   return (

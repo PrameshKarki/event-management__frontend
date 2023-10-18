@@ -47,3 +47,9 @@ mutation CreateSession($eventID:ID!,$data:SessionInput!){
   }
 }
 `
+
+export const ADD_MEMBERS_TO_THE_EVENT = gql`
+mutation AddMembersToTheEvent($id:ID!,$data:AddMemberInput!){
+  addMembersToEvent(id:$id,data:$data)
+}
+`

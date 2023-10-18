@@ -6,6 +6,7 @@ import Table from "./Table";
 const EventSessions = ({ eventID }: { eventID: string }) => {
   const { data: sessions, loading } = useQuery(GET_SESSIONS_OF_EVENT, {
     client: client,
+    fetchPolicy: "network-only",
     variables: {
       id: eventID,
     },

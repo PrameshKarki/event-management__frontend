@@ -58,3 +58,12 @@ export const GET_SESSIONS_OF_EVENT = gql`
   }
 }
   `
+
+export const GET_USERS = gql`
+  query GetUsers{
+ users{
+  id
+  name
+  } 
+}
+  `

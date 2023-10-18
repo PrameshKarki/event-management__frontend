@@ -1,21 +1,15 @@
-import React from "react";
-import DashboardLayout from "../Layout";
-import { useRouter } from "next/router";
 import { useQuery } from "@apollo/client";
-import {
-  GET_EVENT,
-  GET_MEMBERS_OF_EVENT,
-  GET_SESSIONS_OF_EVENT,
-} from "../../../graphql/queries";
-import client from "../../../configs/graphql";
 import dayjs from "dayjs";
-import { HiOutlineLocationMarker } from "react-icons/hi";
+import { useRouter } from "next/router";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { CgDetailsMore } from "react-icons/cg";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import { Event } from "../../../components/EventCard";
-import Table from "../../../components/Table";
 import EventMembers from "../../../components/EventMembers";
 import EventSessions from "../../../components/EventSessions";
+import client from "../../../configs/graphql";
+import { GET_EVENT } from "../../../graphql/queries";
+import DashboardLayout from "../Layout";
 
 const EventDetails = () => {
   const router = useRouter();
