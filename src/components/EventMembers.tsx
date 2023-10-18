@@ -42,9 +42,9 @@ const EventMembers = ({
             }`
           );
         }}
-      />
+      ></Table>
     </section>
-  );  
+  );
 };
 
 export default EventMembers;

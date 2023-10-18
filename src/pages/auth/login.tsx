@@ -1,10 +1,10 @@
 import { useMutation } from "@apollo/client";
 import Link from "next/link";
-import { LOGIN_USER } from "../../graphql/mutations";
-import client from "../../configs/graphql";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { useToast } from "../../components/ui/use-toast";
 import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useToast } from "../../components/ui/use-toast";
+import client from "../../configs/graphql";
+import { LOGIN_USER } from "../../graphql/mutations";
 
 interface ILoginInput {
   email: string;
@@ -38,12 +38,13 @@ const Login = () => {
         },
       });
       if (res.data) {
+        localStorage.setItem("token", res?.data?.userLogin?.accessToken ?? "");
         toast({
           title: "Success",
           description: "Logged in successfully.",
           variant: "success",
         });
-        
+
         reset({
           email: "",
           password: "",

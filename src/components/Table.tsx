@@ -8,11 +8,21 @@ interface IProps {
   loading?: boolean;
   action?: string;
   onAction?: () => void;
+  children?: React.ReactNode;
 }
 
 const Table = (props: IProps) => {
-  const { title, description, data, keysToExclude, loading, action, onAction } =
-    props;
+  const {
+    title,
+    description,
+    data,
+    keysToExclude,
+    loading,
+    action,
+    onAction,
+    children,
+  } = props;
+  console.log("🚀 ~ file: Table.tsx:25 ~ Table ~ data:", data);
   let keys = Object.keys(data[0] ?? {});
 
   if (keysToExclude) {
@@ -45,8 +55,8 @@ const Table = (props: IProps) => {
         {hasData ? (
           <>
             <table className="w-full text-sm text-left">
-              <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-                <tr>
+              <thead className="  text-gray-600 font-medium border-b">
+                <tr className="bg-gray-50">
                   {keys.map((el) => {
                     return (
                       <th className="py-3 px-6">
@@ -54,7 +64,7 @@ const Table = (props: IProps) => {
                       </th>
                     );
                   })}
-                  <th className="py-3 px-6"></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody className="text-gray-600 divide-y">
@@ -67,20 +77,6 @@ const Table = (props: IProps) => {
                         </td>
                       </>
                     ))}
-                    {/* <td className="text-right px-6 whitespace-nowrap">
-                  <a
-                    href="javascript:void()"
-                    className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Edit
-                  </a>
-                  <button
-                    href="javascript:void()"
-                    className="py-2 leading-none px-3 font-medium text-red-600 hover:text-red-500 duration-150 hover:bg-gray-50 rounded-lg"
-                  >
-                    Delete
-                  </button>
-                </td> */}
                   </tr>
                 ))}
               </tbody>

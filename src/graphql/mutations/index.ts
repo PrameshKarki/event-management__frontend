@@ -62,3 +62,11 @@ mutation DeleteEvent($id:ID!){
   }
 }
 `
+
+export const DELETE_SESSION = gql`
+mutation DeleteSession($id:ID!){
+   deleteSession(id:$id){
+    success
+    message
+  }
+}`
