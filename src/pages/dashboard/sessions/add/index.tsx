@@ -1,25 +1,30 @@
-import client from "../../../../configs/graphql";
-import { useMutation } from "@apollo/client";
-import { CREATE_EVENT } from "../../../../graphql/mutations";
-import DashboardLayout from "../../Layout";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
-import { Calendar } from "../../../../components/ui/calendar";
-import { useToast } from "../../../../components/ui/use-toast";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Event } from "../../../../components/EventCard";
+import { useToast } from "../../../../components/ui/use-toast";
+import client from "../../../../configs/graphql";
+import { ADD_SESSION } from "../../../../graphql/mutations";
+import { MY_EVENTS } from "../../../../graphql/queries";
+import DashboardLayout from "../../Layout";
 
-interface IEventInput {
+interface ISessionInput {
+  eventID: string;
   name: string;
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
   description: string;
-  location: string;
 }
 
-const AddEvent = () => {
+const AddSession = () => {
+  const { data, loading, error } = useQuery(MY_EVENTS, {
+    client: client,
+    fetchPolicy: "network-only",
+  });
+
   const { toast } = useToast();
   const router = useRouter();
-  const [createEvent] = useMutation(CREATE_EVENT, {
+  const [createSession] = useMutation(ADD_SESSION, {
     client: client,
   });
   const {
@@ -28,26 +33,28 @@ const AddEvent = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<IEventInput>();
+  } = useForm<ISessionInput>();
 
-  const addEventHandler: SubmitHandler<IEventInput> = async (data) => {
+  const addSessionHandler: SubmitHandler<ISessionInput> = async (data) => {
+    const { eventID, ...rest } = data;
     try {
-      const res = await createEvent({
+      const res = await createSession({
         variables: {
-          data,
+          eventID: data.eventID,
+          data: rest,
         },
       });
       if (res.data) {
         reset({
+          eventID: "",
           name: "",
-          location: "",
+          startTime: "",
+          endTime: "",
           description: "",
-          startDate: "",
-          endDate: "",
         });
         toast({
           title: "Success",
-          description: "Event created successfully.",
+          description: "Session added successfully.",
           variant: "success",
         });
         router.push("/dashboard/events");
@@ -61,14 +68,31 @@ const AddEvent = () => {
     }
   };
 
+  const myEvents = data?.myEvents as Event[];
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Create new event</h2>
+      <h2 className="font-semibold text-xl mb-5">Add Session</h2>
       <div>
         <form
-          onSubmit={handleSubmit(addEventHandler)}
+          onSubmit={handleSubmit(addSessionHandler)}
           className="mt-8 space-y-5"
         >
+          <div>
+            <label className="font-medium">Event</label>
+            <select
+              {...register("eventID")}
+              name="eventID"
+              id="eventID"
+              className="block w-full bg-gray-100 px-2 py-3 my-2"
+            >
+              <option value="">Select Event</option>
+              {myEvents?.map((el) => {
+                return (
+                  <option value={el.id}>{el?.name?.toLocaleLowerCase()}</option>
+                );
+              })}
+            </select>
+          </div>
           <div>
             <label className="font-medium">Name</label>
             <input
@@ -80,31 +104,21 @@ const AddEvent = () => {
             />
           </div>
           <div>
-            <label className="font-medium">Location</label>
+            <label className="font-medium">Start Time</label>
             <input
-              {...register("location")}
-              type="text"
-              name="location"
+              {...register("startTime")}
+              type="time"
+              name="startTime"
               required
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
           </div>
           <div>
-            <label className="font-medium">Start Date</label>
+            <label className="font-medium">End Time</label>
             <input
-              {...register("startDate")}
-              type="date"
-              name="startDate"
-              required
-              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
-            />
-          </div>
-          <div>
-            <label className="font-medium">End Date</label>
-            <input
-              {...register("endDate")}
-              name="endDate"
-              type="date"
+              {...register("endTime")}
+              name="endTime"
+              type="time"
               required
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
             />
@@ -125,7 +139,7 @@ const AddEvent = () => {
             type="submit"
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
           >
-            Create Event
+            Add Session
           </button>
         </form>
       </div>
@@ -133,4 +147,4 @@ const AddEvent = () => {
   );
 };
 
-export default AddEvent;
+export default AddSession;

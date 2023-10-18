@@ -29,3 +29,21 @@ mutation CreateEvent($data:EventInput!){
   }
 }
 `
+
+
+export const CREATE_EXPENSE = gql`
+mutation AddExpense($EventID:ID!,$data:ExpenseInput!){
+  addExpense(eventId:$EventID,data:$data){
+    success
+    message
+  }
+}
+`
+export const ADD_SESSION = gql`
+mutation CreateSession($eventID:ID!,$data:SessionInput!){
+  createSession(eventID:$eventID,data:$data){
+    success
+    message
+  }
+}
+`

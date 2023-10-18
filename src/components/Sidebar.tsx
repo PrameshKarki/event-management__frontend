@@ -1,9 +1,8 @@
 "use client";
 import Link from "next/link";
-import React, { ReactNode, useEffect, useRef, useState } from "react";
 
-import { GrFormAdd } from "react-icons/gr";
 import { AiOutlineMenu } from "react-icons/ai";
+import { GrFormAdd } from "react-icons/gr";
 
 const navigation = [
   {
@@ -35,6 +34,16 @@ const navigation = [
   {
     href: "/dashboard/events/add",
     name: "Add New Event",
+    icon: <GrFormAdd size={22} color="grey" />,
+  },
+  {
+    href: "/dashboard/sessions/add",
+    name: "Add Session",
+    icon: <GrFormAdd size={22} color="grey" />,
+  },
+  {
+    href: "/dashboard/expense/add",
+    name: "Add Expense",
     icon: <GrFormAdd size={22} color="grey" />,
   },
 ];
