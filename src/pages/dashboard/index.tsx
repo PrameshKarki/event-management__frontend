@@ -1,9 +1,8 @@
-import React from "react";
-import client from "../../configs/graphql";
 import { useQuery } from "@apollo/client";
-import { GET_EVENTS, MY_EVENTS } from "../../graphql/queries";
-import DashboardLayout from "./Layout";
 import EventCard, { Event } from "../../components/EventCard";
+import client from "../../configs/graphql";
+import { GET_EVENTS } from "../../graphql/queries";
+import DashboardLayout from "./Layout";
 
 const Dashboard = () => {
   const { data, loading, error } = useQuery(GET_EVENTS, {
@@ -13,7 +12,10 @@ const Dashboard = () => {
 
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">All Events</h2>
+      <h2 className="font-semibold text-xl">All Events</h2>
+      <p className="mb-5 text-gray-600 text-sm">
+        These are the events in which you can attend or manage.
+      </p>{" "}
       <section className="flex flex-wrap gap-6">
         {data?.events?.map((event: Event) => (
           <EventCard event={event} />

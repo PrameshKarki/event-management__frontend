@@ -104,7 +104,7 @@ const AddMember = () => {
 
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Add Session</h2>
+      <h2 className="font-semibold text-xl mb-5">Add Members</h2>
       <div>
         <form
           onSubmit={handleSubmit(addSessionHandler)}

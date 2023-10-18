@@ -1,15 +1,16 @@
 "use client";
 import Link from "next/link";
 
-import { AiOutlineMenu } from "react-icons/ai";
-import { BsPeople } from "react-icons/bs";
-import { GrFormAdd } from "react-icons/gr";
+import { BiMessageAltAdd } from "react-icons/bi";
+import { BsCalendar4Event, BsPeople } from "react-icons/bs";
+import { GiMoneyStack } from "react-icons/gi";
+import { MdOutlineEventAvailable } from "react-icons/md";
 
 const navigation = [
   {
     href: "/dashboard",
     name: "All Events",
-    icon: <AiOutlineMenu size={22} color="grey" />,
+    icon: <BsCalendar4Event size={18} color="grey" />,
   },
 
   {
@@ -40,17 +41,17 @@ const navigation = [
   {
     href: "/dashboard/events/add",
     name: "Add New Event",
-    icon: <GrFormAdd size={22} color="grey" />,
+    icon: <MdOutlineEventAvailable size={22} color="grey" />,
   },
   {
     href: "/dashboard/sessions/add",
     name: "Add Session",
-    icon: <GrFormAdd size={22} color="grey" />,
+    icon: <BiMessageAltAdd size={22} color="grey" />,
   },
   {
     href: "/dashboard/expense/add",
     name: "Add Expense",
-    icon: <GrFormAdd size={22} color="grey" />,
+    icon: <GiMoneyStack size={22} color="grey" />,
   },
 ];
 

@@ -5,6 +5,7 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { CgDetailsMore } from "react-icons/cg";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { Event } from "../../../components/EventCard";
+import EventExpenses from "../../../components/EventExpenses";
 import EventMembers from "../../../components/EventMembers";
 import EventSessions from "../../../components/EventSessions";
 import client from "../../../configs/graphql";
@@ -41,6 +42,7 @@ const EventDetails = () => {
       </div>
       <EventMembers eventID={event?.id} />
       <EventSessions eventID={event?.id} />
+      <EventExpenses eventID={event?.id} />
     </DashboardLayout>
   );
 };

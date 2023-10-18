@@ -3,7 +3,7 @@ import { setContext } from '@apollo/client/link/context';
 
 const authLink = setContext((_, { headers }) => {
     // WIP:
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNjk3NjEyMTM1LCJpZCI6IjEifQ.JSe_tXpulWlE32x8QvGeS8uRHDZ6uiIyT7FA_zq3RQU';
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNjk3NjI0MzU0LCJpZCI6IjEifQ.LZwonCgiiTUFpNh6saoilcsNrqYFYexlZO40GeQpCWw';
 
     return {
         headers: {

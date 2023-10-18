@@ -67,3 +67,23 @@ export const GET_USERS = gql`
   } 
 }
   `
+
+export const GET_EXPENSES_OF_EVENT = gql`
+  query GetExpensesOfEvent($eventID:ID!){
+  getExpensesOfEvent(eventId:$eventID){
+    id
+    itemName
+    cost
+    description
+    category
+  }
+  
+}
+  `
+
+export const GET_EXPENSES_BY_CATEGORY = gql`query GetExpensesByCategory($eventID:ID!){
+    getExpensesByCategory(eventId:$eventID){
+     total
+      category
+    }
+  }`
