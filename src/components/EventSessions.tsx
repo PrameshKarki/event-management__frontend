@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import client from "../configs/graphql";
 
 const EventSessions = ({ eventID }: { eventID: string }) => {
-  const sessions = useQuery(GET_SESSIONS_OF_EVENT, {
+  const { data: sessions, loading } = useQuery(GET_SESSIONS_OF_EVENT, {
     client: client,
     variables: {
       id: eventID,
@@ -18,6 +18,7 @@ const EventSessions = ({ eventID }: { eventID: string }) => {
         description="Sessions of event"
         title="Sessions"
         keysToExclude={["__typename"]}
+        loading={loading}
       />
     </section>
   );

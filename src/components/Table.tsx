@@ -6,15 +6,18 @@ interface IProps {
   description: string;
   data: any[];
   keysToExclude?: string[];
+  loading: boolean;
 }
 
 const Table = (props: IProps) => {
-  const { title, description, data, keysToExclude } = props;
+  const { title, description, data, keysToExclude, loading } = props;
   let keys = Object.keys(data[0] ?? {});
 
   if (keysToExclude) {
     keys = keys.filter((el) => !keysToExclude.includes(el));
   }
+
+  const hasData = data.length > 0 && !loading;
 
   return (
     <>
@@ -33,28 +36,32 @@ const Table = (props: IProps) => {
         </div> */}
       </div>
       <div className="mt-3 border rounded-lg overflow-x-auto">
-        <table className="w-full text-sm text-left">
-          <thead className="bg-gray-50 text-gray-600 font-medium border-b">
-            <tr>
-              {keys.map((el) => {
-                return (
-                  <th className="py-3 px-6">{camelCaseToTextCapitalize(el)}</th>
-                );
-              })}
-              <th className="py-3 px-6"></th>
-            </tr>
-          </thead>
-          <tbody className="text-gray-600 divide-y">
-            {data.map((item, idx) => (
-              <tr key={idx}>
-                {Object.keys(item).map((el, index: number) => (
-                  <>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item[keys[index]]}
-                    </td>
-                  </>
-                ))}
-                {/* <td className="text-right px-6 whitespace-nowrap">
+        {hasData ? (
+          <>
+            <table className="w-full text-sm text-left">
+              <thead className="bg-gray-50 text-gray-600 font-medium border-b">
+                <tr>
+                  {keys.map((el) => {
+                    return (
+                      <th className="py-3 px-6">
+                        {camelCaseToTextCapitalize(el)}
+                      </th>
+                    );
+                  })}
+                  <th className="py-3 px-6"></th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 divide-y">
+                {data.map((item, idx) => (
+                  <tr key={idx}>
+                    {Object.keys(item).map((el, index: number) => (
+                      <>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {item[keys[index]]}
+                        </td>
+                      </>
+                    ))}
+                    {/* <td className="text-right px-6 whitespace-nowrap">
                   <a
                     href="javascript:void()"
                     className="py-2 px-3 font-medium text-indigo-600 hover:text-indigo-500 duration-150 hover:bg-gray-50 rounded-lg"
@@ -68,10 +75,18 @@ const Table = (props: IProps) => {
                     Delete
                   </button>
                 </td> */}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        ) : (
+          <>
+            <p className="text-center text-sm text-gray-400 py-4">
+              No Data Found
+            </p>
+          </>
+        )}
       </div>
     </>
   );
