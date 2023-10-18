@@ -11,6 +11,17 @@ export const GET_EVENTS = gql` query GetEvents{
       
     }
   }`;
+export const GET_ACCESSIBLE_EVENTS = gql` query GetAccessibleEvents{
+    getAccessibleEvents{
+      id
+      name
+      endDate
+      startDate
+      description
+      location
+      
+    }
+  }`;
 
 export const MY_EVENTS = gql`query MyEvents{
     myEvents{

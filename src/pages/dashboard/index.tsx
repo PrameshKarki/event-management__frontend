@@ -1,11 +1,11 @@
 import { useQuery } from "@apollo/client";
 import EventCard, { Event } from "../../components/EventCard";
 import client from "../../configs/graphql";
-import { GET_EVENTS } from "../../graphql/queries";
+import { GET_ACCESSIBLE_EVENTS } from "../../graphql/queries";
 import DashboardLayout from "./Layout";
 
 const Dashboard = () => {
-  const { data, loading, error } = useQuery(GET_EVENTS, {
+  const { data, loading, error } = useQuery(GET_ACCESSIBLE_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
@@ -17,7 +17,7 @@ const Dashboard = () => {
         These are the events in which you can attend or manage.
       </p>{" "}
       <section className="flex flex-wrap gap-6">
-        {data?.events?.map((event: Event) => (
+        {data?.getAccessibleEvents?.map((event: Event) => (
           <EventCard event={event} />
         ))}
       </section>
