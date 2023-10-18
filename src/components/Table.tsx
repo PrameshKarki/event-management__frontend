@@ -1,4 +1,3 @@
-import { de } from "date-fns/locale";
 import { camelCaseToTextCapitalize } from "../utils/utils";
 
 interface IProps {
@@ -6,7 +5,7 @@ interface IProps {
   description: string;
   data: any[];
   keysToExclude?: string[];
-  loading: boolean;
+  loading?: boolean;
 }
 
 const Table = (props: IProps) => {
@@ -16,9 +15,11 @@ const Table = (props: IProps) => {
   if (keysToExclude) {
     keys = keys.filter((el) => !keysToExclude.includes(el));
   }
+  let hasData = true;
 
-  const hasData = data.length > 0 && !loading;
-
+  if (loading !== undefined) {
+    hasData = data.length > 0 && !loading;
+  }
   return (
     <>
       <div className="items-start justify-between md:flex">
