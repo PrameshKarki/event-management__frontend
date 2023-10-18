@@ -1,9 +1,18 @@
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import client from "../configs/graphql";
+import { MemberRole } from "../constants";
 import { GET_SESSIONS_OF_EVENT } from "../graphql/queries";
 import Table from "./Table";
 
-const EventSessions = ({ eventID }: { eventID: string }) => {
+const EventSessions = ({
+  eventID,
+  role,
+}: {
+  eventID: string;
+  role: MemberRole;
+}) => {
+  const router = useRouter();
   const { data: sessions, loading } = useQuery(GET_SESSIONS_OF_EVENT, {
     client: client,
     fetchPolicy: "network-only",
@@ -19,6 +28,14 @@ const EventSessions = ({ eventID }: { eventID: string }) => {
         title="Sessions"
         keysToExclude={["__typename"]}
         loading={loading}
+        action={
+          [MemberRole.ADMIN, MemberRole.OWNER].includes(role)
+            ? "Add"
+            : undefined
+        }
+        onAction={() => {
+          router.push(`/dashboard/sessions/add?event=${eventID}&disable=true`);
+        }}
       />
     </section>
   );

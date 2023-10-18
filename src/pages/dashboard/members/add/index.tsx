@@ -45,7 +45,7 @@ const AddMember = () => {
     formState: { errors },
   } = useForm<IAddMemberInput>({
     defaultValues: {
-      id: "",
+      id: (router?.query?.event as string) ?? "",
       members: [
         {
           id: "",
@@ -102,6 +102,8 @@ const AddMember = () => {
   const myEvents = data?.myEvents as Event[];
   const eligibleUsers = users?.users;
 
+  console.log("🚀 ~ file: index.tsx:106 ~ AddMember ~ router:", router.query);
+
   return (
     <DashboardLayout>
       <h2 className="font-semibold text-xl mb-5">Add Members</h2>
@@ -117,6 +119,8 @@ const AddMember = () => {
               name="id"
               id="id"
               className="block w-full bg-gray-100 px-2 py-3 my-2"
+              value={router?.query?.event}
+              disabled={router?.query?.disable === "true"}
               onChange={(e) => {
                 replace([
                   {
@@ -141,6 +145,15 @@ const AddMember = () => {
                 <select
                   {...register(`members.${index}.role`)}
                   className="block w-full bg-gray-100 px-2 py-3 my-2"
+                  value={
+                    router?.query?.role?.length
+                      ? router?.query?.role
+                      : undefined
+                  }
+                  disabled={
+                    router?.query?.disable === "true" &&
+                    Boolean(router?.query?.role?.length)
+                  }
                 >
                   <option value="">Select Role</option>
                   {Object.keys(MemberRole)?.map((el) => {

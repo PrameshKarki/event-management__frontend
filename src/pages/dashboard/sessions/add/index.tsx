@@ -24,6 +24,7 @@ const AddSession = () => {
 
   const { toast } = useToast();
   const router = useRouter();
+  console.log("🚀 ~ file: index.tsx:27 ~ AddSession ~ router:", router.query);
   const [createSession] = useMutation(ADD_SESSION, {
     client: client,
   });
@@ -33,7 +34,11 @@ const AddSession = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<ISessionInput>();
+  } = useForm<ISessionInput>({
+    defaultValues: {
+      eventID: (router?.query?.event as string) ?? "",
+    },
+  });
 
   const addSessionHandler: SubmitHandler<ISessionInput> = async (data) => {
     const { eventID, ...rest } = data;
@@ -84,11 +89,15 @@ const AddSession = () => {
               name="eventID"
               id="eventID"
               className="block w-full bg-gray-100 px-2 py-3 my-2"
+              value={router?.query?.event}
+              disabled={router?.query?.disable === "true"}
             >
               <option value="">Select Event</option>
               {myEvents?.map((el) => {
                 return (
-                  <option value={el.id}>{el?.name?.toLocaleLowerCase()}</option>
+                  <option value={el.id}>
+                    {el?.name?.toLocaleLowerCase()}{" "}
+                  </option>
                 );
               })}
             </select>

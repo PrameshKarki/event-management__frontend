@@ -6,10 +6,13 @@ interface IProps {
   data: any[];
   keysToExclude?: string[];
   loading?: boolean;
+  action?: string;
+  onAction?: () => void;
 }
 
 const Table = (props: IProps) => {
-  const { title, description, data, keysToExclude, loading } = props;
+  const { title, description, data, keysToExclude, loading, action, onAction } =
+    props;
   let keys = Object.keys(data[0] ?? {});
 
   if (keysToExclude) {
@@ -27,14 +30,16 @@ const Table = (props: IProps) => {
           <h3 className="font-medium text-lg">{title}</h3>
           <p className="text-gray-600">{description}</p>
         </div>
-        {/* <div className="mt-3 md:mt-0">
-          <a
-            href="javascript:void(0)"
-            className="inline-block px-4 py-2 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
-          >
-            Add member
-          </a>
-        </div> */}
+        {action && onAction && (
+          <div className="mt-3 md:mt-0">
+            <p
+              onClick={() => onAction()}
+              className="cursor-pointer text-sm inline-block px-3 py-1 text-white duration-150 font-medium bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-700 md:text-sm"
+            >
+              {action}
+            </p>
+          </div>
+        )}
       </div>
       <div className="mt-3 border rounded-lg overflow-x-auto">
         {hasData ? (

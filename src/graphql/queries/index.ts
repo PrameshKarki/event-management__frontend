@@ -98,3 +98,7 @@ export const GET_EXPENSES_BY_CATEGORY = gql`query GetExpensesByCategory($eventID
       category
     }
   }`
+
+export const GET_ROLE_OF_USER = gql`query GetRoleOfUser($eventID:ID!){
+  getRole(eventID:$eventID)
+}`

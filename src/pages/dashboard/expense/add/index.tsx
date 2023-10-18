@@ -34,7 +34,11 @@ const AddExpense = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<IExpenseInput>();
+  } = useForm<IExpenseInput>({
+    defaultValues: {
+      eventID: (router?.query?.event as string) ?? "",
+    },
+  });
 
   const addExpenseHandler: SubmitHandler<IExpenseInput> = async (data) => {
     try {
@@ -82,10 +86,12 @@ const AddExpense = () => {
           <div>
             <label className="font-medium">Event</label>
             <select
+              value={router?.query?.event}
               {...register("eventID")}
               name="eventID"
               id="eventID"
               className="block w-full bg-gray-100 px-2 py-3 my-2"
+              disabled={router?.query?.disable === "true"}
             >
               <option value="">Select Event</option>
               {myEvents?.map((el) => {

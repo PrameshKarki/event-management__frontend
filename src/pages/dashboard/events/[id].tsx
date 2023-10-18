@@ -9,7 +9,8 @@ import EventExpenses from "../../../components/EventExpenses";
 import EventMembers from "../../../components/EventMembers";
 import EventSessions from "../../../components/EventSessions";
 import client from "../../../configs/graphql";
-import { GET_EVENT } from "../../../graphql/queries";
+import { MemberRole } from "../../../constants";
+import { GET_EVENT, GET_ROLE_OF_USER } from "../../../graphql/queries";
 import DashboardLayout from "../Layout";
 
 const EventDetails = () => {
@@ -20,7 +21,18 @@ const EventDetails = () => {
       id: router.query.id,
     },
   });
+  const { data: role } = useQuery(GET_ROLE_OF_USER, {
+    client: client,
+    variables: {
+      eventID: router.query.id,
+    },
+  });
 
+  let userRole = role?.getRole as MemberRole;
+  // @ts-ignore
+  if (userRole === "") {
+    userRole = MemberRole.NONE;
+  }
   const event = data?.data?.event as Event;
   return (
     <DashboardLayout>
@@ -40,9 +52,11 @@ const EventDetails = () => {
         <CgDetailsMore color="grey" />
         <p className="text-gray-600 text-sm">{event?.description}</p>
       </div>
-      <EventMembers eventID={event?.id} />
-      <EventSessions eventID={event?.id} />
-      <EventExpenses eventID={event?.id} />
+      <EventMembers eventID={event?.id} role={userRole} />
+      <EventSessions eventID={event?.id} role={userRole} />
+      {[MemberRole.ADMIN, MemberRole.OWNER].includes(userRole) && (
+        <EventExpenses eventID={event?.id} role={userRole} />
+      )}
     </DashboardLayout>
   );
 };

@@ -1,17 +1,24 @@
-import React from "react";
-import Table from "./Table";
 import { useQuery } from "@apollo/client";
-import { GET_MEMBERS_OF_EVENT } from "../graphql/queries";
+import { useRouter } from "next/router";
 import client from "../configs/graphql";
+import { MemberRole } from "../constants";
+import { GET_MEMBERS_OF_EVENT } from "../graphql/queries";
+import Table from "./Table";
 
-const EventMembers = ({ eventID }: { eventID: string }) => {
+const EventMembers = ({
+  eventID,
+  role,
+}: {
+  eventID: string;
+  role: MemberRole;
+}) => {
+  const router = useRouter();
   const members = useQuery(GET_MEMBERS_OF_EVENT, {
     client: client,
-    fetchPolicy:"network-only",
+    fetchPolicy: "network-only",
     variables: {
       eventID,
     },
-    
   });
 
   return (
@@ -21,9 +28,23 @@ const EventMembers = ({ eventID }: { eventID: string }) => {
         description="Members of event"
         title="Members"
         keysToExclude={["__typename"]}
+        action={
+          [MemberRole.ADMIN, MemberRole.OWNER, MemberRole.CONTRIBUTOR].includes(
+            role
+          )
+            ? "Add"
+            : undefined
+        }
+        onAction={() => {
+          router.push(
+            `/dashboard/members/add?event=${eventID}&disable=true&role=${
+              role === MemberRole.CONTRIBUTOR ? MemberRole.ATTENDEE : ""
+            }`
+          );
+        }}
       />
     </section>
-  );
+  );  
 };
 
 export default EventMembers;

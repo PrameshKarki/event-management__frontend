@@ -7,5 +7,7 @@ export enum ExpenseCategory {
 export enum MemberRole {
     ADMIN = "ADMIN",
     CONTRIBUTOR = "CONTRIBUTOR",
-    ATTENDEE = "ATTENDEE"
+    ATTENDEE = "ATTENDEE",
+    NONE = "NONE",
+    OWNER = "OWNER"
 }

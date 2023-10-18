@@ -1,5 +1,7 @@
 import { useQuery } from "@apollo/client";
+import { useRouter } from "next/router";
 import client from "../configs/graphql";
+import { MemberRole } from "../constants";
 import {
   GET_EXPENSES_BY_CATEGORY,
   GET_EXPENSES_OF_EVENT,
@@ -7,7 +9,14 @@ import {
 import PieChart from "./PieChart";
 import Table from "./Table";
 
-const EventExpenses = ({ eventID }: { eventID: string }) => {
+const EventExpenses = ({
+  eventID,
+  role,
+}: {
+  eventID: string;
+  role: MemberRole;
+}) => {
+  const router = useRouter();
   const { data: expenses, loading } = useQuery(GET_EXPENSES_OF_EVENT, {
     client: client,
     fetchPolicy: "network-only",
@@ -24,10 +33,6 @@ const EventExpenses = ({ eventID }: { eventID: string }) => {
     },
   });
   const categoriesWiseExpenses = expensesByCategory?.getExpensesByCategory;
-  console.log(
-    "🚀 ~ file: EventExpenses.tsx:26 ~ EventExpenses ~ categoriesWiseExpenses:",
-    categoriesWiseExpenses
-  );
 
   return (
     <section className="member-section mt-4 shadow-md px-2 py-3 w-full">
@@ -37,6 +42,14 @@ const EventExpenses = ({ eventID }: { eventID: string }) => {
         title="Expenses"
         keysToExclude={["__typename"]}
         loading={loading}
+        action={
+          [MemberRole.ADMIN, MemberRole.OWNER].includes(role)
+            ? "Add"
+            : undefined
+        }
+        onAction={() => {
+          router.push(`/dashboard/expense/add?event=${eventID}&disable=true`);
+        }}
       />
       <div className="flex justify-center">
         <PieChart
