@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { FetchResult, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Event } from "../../../../components/EventCard";
@@ -6,6 +6,7 @@ import { useToast } from "../../../../components/ui/use-toast";
 import client from "../../../../configs/graphql";
 import { ExpenseCategory } from "../../../../constants";
 import { CREATE_EXPENSE } from "../../../../graphql/mutations";
+import { UPDATE_EXPENSE } from "../../../../graphql/mutations/expense/expense.mutation";
 import { MY_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
@@ -18,14 +19,18 @@ interface IExpenseInput {
 }
 
 const AddExpense = () => {
-  const { toast } = useToast();
   const router = useRouter();
+  const isEditMode = router?.query?.mode === "edit";
+  const { toast } = useToast();
   const { data, loading, error } = useQuery(MY_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
 
   const [createExpense] = useMutation(CREATE_EXPENSE, {
+    client: client,
+  });
+  const [updateExpense] = useMutation(UPDATE_EXPENSE, {
     client: client,
   });
   const {
@@ -37,18 +42,32 @@ const AddExpense = () => {
   } = useForm<IExpenseInput>({
     defaultValues: {
       eventID: (router?.query?.event as string) ?? "",
+      itemName: (router?.query?.itemName as string) ?? "",
+      cost: (router?.query?.cost as string) ?? "",
+      description: (router?.query?.description as string) ?? "",
+      category: (router?.query?.category as string) ?? "",
     },
   });
 
-  const addExpenseHandler: SubmitHandler<IExpenseInput> = async (data) => {
+  const expenseHandler: SubmitHandler<IExpenseInput> = async (data) => {
+    let res: FetchResult<any>;
     try {
       const { eventID, ...rest } = data;
-      const res = await createExpense({
-        variables: {
-          EventID: data.eventID,
-          data: rest,
-        },
-      });
+      if (!isEditMode) {
+        res = await createExpense({
+          variables: {
+            EventID: data.eventID,
+            data: rest,
+          },
+        });
+      } else {
+        res = await updateExpense({
+          variables: {
+            id: router?.query?.id as string,
+            data: rest,
+          },
+        });
+      }
       if (res.data) {
         reset({
           eventID: "",
@@ -59,7 +78,9 @@ const AddExpense = () => {
         });
         toast({
           title: "Success",
-          description: "Expense added successfully.",
+          description: `Expense ${
+            isEditMode ? "updated " : "added "
+          } successfully.`,
           variant: "success",
         });
         router.push("/dashboard/events");
@@ -77,10 +98,12 @@ const AddExpense = () => {
 
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Add Expense</h2>
+      <h2 className="font-semibold text-xl mb-5">
+        {isEditMode ? "Update Expense" : "Add Expense"}
+      </h2>
       <div>
         <form
-          onSubmit={handleSubmit(addExpenseHandler)}
+          onSubmit={handleSubmit(expenseHandler)}
           className="mt-8 space-y-5"
         >
           <div>
@@ -151,7 +174,7 @@ const AddExpense = () => {
             type="submit"
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
           >
-            Add Expense
+            {isEditMode ? "Update" : "Add"} Expense
           </button>
         </form>
       </div>
