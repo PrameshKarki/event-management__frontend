@@ -1,11 +1,11 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import Cookies from 'universal-cookie';
 
 const authLink = setContext((_, { headers }) => {
-    // WIP:
-    // const token = localStorage.getItem('token')
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNjk3Njk4NDIyLCJpZCI6IjEifQ.sBsO7fzlLZjHeevie_PU5KeO4QW6zF9WasxbnyQ5BVU'
-
+    const cookies = new Cookies(null, { path: '/' });
+    const token = cookies.get("token")
+    console.log("🚀 ~ file: graphql.ts:8 ~ authLink ~ token:", token)
     return {
         headers: {
             ...headers,

@@ -22,7 +22,6 @@ const Table = (props: IProps) => {
     onAction,
     children,
   } = props;
-  console.log("🚀 ~ file: Table.tsx:25 ~ Table ~ data:", data);
   let keys = Object.keys(data[0] ?? {});
 
   if (keysToExclude) {

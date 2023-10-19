@@ -2,6 +2,7 @@ import { useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Cookies from "universal-cookie";
 import { useToast } from "../../components/ui/use-toast";
 import client from "../../configs/graphql";
 import { LOGIN_USER } from "../../graphql/mutations";
@@ -17,6 +18,7 @@ export interface User {
 }
 
 const Login = () => {
+  const cookies = new Cookies(null, { path: "/" });
   const router = useRouter();
   const { toast } = useToast();
   const {
@@ -38,13 +40,17 @@ const Login = () => {
         },
       });
       if (res.data) {
-        localStorage.setItem("token", res?.data?.userLogin?.accessToken ?? "");
+        const token = res?.data?.userLogin?.accessToken;
+        cookies.set("token", token ?? "", {
+          sameSite: true,
+          secure: true,
+        });
+        router.push("/dashboard");
         toast({
           title: "Success",
           description: "Logged in successfully.",
           variant: "success",
         });
-
         reset({
           email: "",
           password: "",
