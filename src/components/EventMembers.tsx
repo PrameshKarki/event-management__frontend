@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { AiOutlineDelete } from "react-icons/ai";
+import { BiEdit } from "react-icons/bi";
 import client from "../configs/graphql";
 import { MemberRole } from "../constants";
 import { DELETE_EVENT_MEMBER } from "../graphql/mutations";
@@ -65,6 +66,18 @@ const EventMembers = ({
     }
   };
 
+  const editHandler = (data: any) => {
+    router.push({
+      pathname: `/dashboard/members/add`,
+      query: {
+        event: eventID,
+        disable: true,
+        mode: "edit",
+        ...data,
+      },
+    });
+  };
+
   let data = [];
 
   if (members?.data?.getMembersOfEvent?.length > 0) {
@@ -73,6 +86,12 @@ const EventMembers = ({
         ...el,
         action: (
           <>
+            <button
+              onClick={() => editHandler(el)}
+              className="bg-indigo-600 p-1 text-sm text-white px-2 py-1 m-2"
+            >
+              <BiEdit size={18} />
+            </button>
             <AlertDialog>
               <AlertDialogTrigger>
                 <button className="bg-red-600 p-1 text-sm text-white px-2 py-1 my-2">

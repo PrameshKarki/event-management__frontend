@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { FetchResult, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { SubmitHandler, useFieldArray, useForm } from "react-hook-form";
 import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
@@ -7,6 +7,7 @@ import { useToast } from "../../../../components/ui/use-toast";
 import client from "../../../../configs/graphql";
 import { MemberRole } from "../../../../constants";
 import { ADD_MEMBERS_TO_THE_EVENT } from "../../../../graphql/mutations";
+import { UPDATE_MEMBER_TO_EVENT } from "../../../../graphql/mutations/member/member.mutation";
 import { GET_USERS, MY_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
@@ -21,6 +22,7 @@ interface IAddMemberInput {
 }
 
 const AddMember = () => {
+  const router = useRouter();
   const { data, loading, error } = useQuery(MY_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
@@ -30,9 +32,13 @@ const AddMember = () => {
     fetchPolicy: "network-only",
   });
 
+  const isEditMode = router?.query?.mode === "edit";
+
   const { toast } = useToast();
-  const router = useRouter();
   const [addMembers] = useMutation(ADD_MEMBERS_TO_THE_EVENT, {
+    client: client,
+  });
+  const [updateMember] = useMutation(UPDATE_MEMBER_TO_EVENT, {
     client: client,
   });
   const {
@@ -48,8 +54,8 @@ const AddMember = () => {
       id: (router?.query?.event as string) ?? "",
       members: [
         {
-          id: "",
-          role: "",
+          id: (router?.query?.id as string) ?? "",
+          role: (router?.query?.role as string) ?? "",
         },
       ],
     },
@@ -63,16 +69,27 @@ const AddMember = () => {
     },
   });
 
-  const addSessionHandler: SubmitHandler<IAddMemberInput> = async (data) => {
+  const addHandler: SubmitHandler<IAddMemberInput> = async (data) => {
+    let res: FetchResult<any>;
     try {
-      const res = await addMembers({
-        variables: {
-          id: data.id,
-          data: {
-            members: data.members,
+      if (!isEditMode) {
+        res = await addMembers({
+          variables: {
+            id: data.id,
+            data: {
+              members: data.members,
+            },
           },
-        },
-      });
+        });
+      } else {
+        res = await updateMember({
+          variables: {
+            eventID: data.id,
+            // There always exist only one item in array
+            data: data.members[0],
+          },
+        });
+      }
       if (res.data) {
         reset({
           id: "",
@@ -85,7 +102,9 @@ const AddMember = () => {
         });
         toast({
           title: "Success",
-          description: "Members added successfully.",
+          description: `Members ${
+            isEditMode ? "edited " : "added "
+          } successfully.`,
           variant: "success",
         });
         router.push("/dashboard/events");
@@ -102,16 +121,13 @@ const AddMember = () => {
   const myEvents = data?.myEvents as Event[];
   const eligibleUsers = users?.users;
 
-  console.log("🚀 ~ file: index.tsx:106 ~ AddMember ~ router:", router.query);
-
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Add Members</h2>
+      <h2 className="font-semibold text-xl mb-5">
+        {isEditMode ? "Update Member" : "Add Members"}
+      </h2>
       <div>
-        <form
-          onSubmit={handleSubmit(addSessionHandler)}
-          className="mt-8 space-y-5"
-        >
+        <form onSubmit={handleSubmit(addHandler)} className="mt-8 space-y-5">
           <div>
             <label className="font-medium">Event</label>
             <select
@@ -145,15 +161,6 @@ const AddMember = () => {
                 <select
                   {...register(`members.${index}.role`)}
                   className="block w-full bg-gray-100 px-2 py-3 my-2"
-                  value={
-                    router?.query?.role?.length
-                      ? router?.query?.role
-                      : undefined
-                  }
-                  disabled={
-                    router?.query?.disable === "true" &&
-                    Boolean(router?.query?.role?.length)
-                  }
                 >
                   <option value="">Select Role</option>
                   {Object.keys(MemberRole)?.map((el) => {
@@ -163,24 +170,28 @@ const AddMember = () => {
                 <select
                   {...register(`members.${index}.id`)}
                   className="block w-full bg-gray-100 px-2 py-3 my-2"
+                  disabled={isEditMode}
+                  value={isEditMode ? router?.query?.id : undefined}
                 >
                   <option value="">Select User</option>
                   {eligibleUsers?.map((el: any) => {
                     return <option value={el.id}>{el?.name}</option>;
                   })}
                 </select>
-                <AiOutlinePlus
-                  className="cursor-pointer"
-                  size={40}
-                  onClick={() =>
-                    append({
-                      id: "",
-                      role: "",
-                    })
-                  }
-                >
-                  Add
-                </AiOutlinePlus>
+                {!isEditMode && (
+                  <AiOutlinePlus
+                    className="cursor-pointer"
+                    size={40}
+                    onClick={() =>
+                      append({
+                        id: "",
+                        role: "",
+                      })
+                    }
+                  >
+                    Add
+                  </AiOutlinePlus>
+                )}
                 {fields.length !== 1 && (
                   <AiOutlineDelete
                     className="cursor-pointer"
@@ -198,7 +209,7 @@ const AddMember = () => {
             type="submit"
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
           >
-            Add Members
+            {isEditMode ? "Update" : "Add"}
           </button>
         </form>
       </div>
