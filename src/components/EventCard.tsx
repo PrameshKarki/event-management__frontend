@@ -83,6 +83,8 @@ const EventCard = (props: IProps) => {
     });
   };
 
+  const dayToStartEvent = dayjs(event.startDate).diff(dayjs(), "day");
+
   return (
     <>
       <div className="shadow-sm px-3 min-w-[250px] min-h-[150px]">
@@ -93,6 +95,11 @@ const EventCard = (props: IProps) => {
             <p className="text-gray-600 text-sm">
               {dayjs(event.startDate).format("MMMM D, YYYY")}-
               {dayjs(event.endDate).format("MMMM D, YYYY")}
+              <p className="font-semibold">{`(${
+                dayToStartEvent < 0
+                  ? "Finished"
+                  : "In " + dayToStartEvent + " days"
+              })`}</p>
             </p>
           </div>
           <div className="flex items-center gap-2 my-1">

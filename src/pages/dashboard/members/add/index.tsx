@@ -55,7 +55,9 @@ const AddMember = () => {
       members: [
         {
           id: (router?.query?.id as string) ?? "",
-          role: (router?.query?.role as string) ?? "",
+          role: Boolean(router?.query?.role?.length)
+            ? (router?.query?.role as string)
+            : "",
         },
       ],
     },
@@ -161,8 +163,16 @@ const AddMember = () => {
                 <select
                   {...register(`members.${index}.role`)}
                   className="block w-full bg-gray-100 px-2 py-3 my-2"
-                  value={!isEditMode ? router?.query?.role : undefined}
-                  disabled={!isEditMode && router?.query?.disable == "true"}
+                  value={
+                    !isEditMode && Boolean(router?.query?.role)
+                      ? router?.query?.role
+                      : undefined
+                  }
+                  disabled={
+                    !isEditMode &&
+                    router?.query?.disable == "true" &&
+                    Boolean(router?.query?.role?.length)
+                  }
                 >
                   <option value="">Select Role</option>
                   {Object.keys(MemberRole)?.map((el) => {
