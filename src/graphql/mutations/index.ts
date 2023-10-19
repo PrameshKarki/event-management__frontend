@@ -78,5 +78,14 @@ mutation DeleteExpense($id:ID!){
     message
   }
 }
+`
+
+export const DELETE_EVENT_MEMBER = gql`
+mutation DeleteEventMember($eventID:ID!,$memberID:String!){
+  removeMemberFromEvent(id:$eventID,memberId:$memberID){
+    success
+    message
+  }
+}
 
 `
