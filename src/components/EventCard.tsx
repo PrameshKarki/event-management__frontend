@@ -8,6 +8,7 @@ import { HiOutlineLocationMarker } from "react-icons/hi";
 import client from "../configs/graphql";
 import { DELETE_EVENT } from "../graphql/mutations";
 import { GET_ACCESSIBLE_EVENTS, MY_EVENTS } from "../graphql/queries";
+import { ROUTE_PATH } from "../routes/route";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -75,7 +76,7 @@ const EventCard = (props: IProps) => {
 
   const editHandler = () => {
     router.push({
-      pathname: "/dashboard/events/add",
+      pathname: ROUTE_PATH.DASHBOARD.EVENT.ADD,
       query: {
         mode: "edit",
         ...event,

@@ -9,6 +9,7 @@ import { MemberRole } from "../../../../constants";
 import { ADD_MEMBERS_TO_THE_EVENT } from "../../../../graphql/mutations";
 import { UPDATE_MEMBER_TO_EVENT } from "../../../../graphql/mutations/member/member.mutation";
 import { GET_ACCESSIBLE_EVENTS, GET_USERS } from "../../../../graphql/queries";
+import { ROUTE_PATH } from "../../../../routes/route";
 import DashboardLayout from "../../Layout";
 
 interface IMemberInput {
@@ -109,7 +110,7 @@ const AddMember = () => {
           } successfully.`,
           variant: "success",
         });
-        router.push("/dashboard/events");
+        router.push(ROUTE_PATH.DASHBOARD.EVENT.ROOT);
       }
     } catch (err: any) {
       toast({

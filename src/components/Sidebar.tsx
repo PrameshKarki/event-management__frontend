@@ -6,17 +6,18 @@ import { BiMessageAltAdd } from "react-icons/bi";
 import { BsCalendar4Event, BsPeople } from "react-icons/bs";
 import { GiMoneyStack } from "react-icons/gi";
 import { MdOutlineEventAvailable } from "react-icons/md";
+import { ROUTE_PATH } from "../routes/route";
 import Logout from "./Logout";
 
 const navigation = [
   {
-    href: "/dashboard",
+    href: ROUTE_PATH.DASHBOARD.ROOT,
     name: "All Events",
     icon: <BsCalendar4Event size={18} color="grey" />,
   },
 
   {
-    href: "/dashboard/events",
+    href: ROUTE_PATH.DASHBOARD.EVENT.ROOT,
     name: "My Events",
     icon: (
       <svg
@@ -36,22 +37,22 @@ const navigation = [
     ),
   },
   {
-    href: "/dashboard/events/add",
+    href: ROUTE_PATH.DASHBOARD.EVENT.ADD,
     name: "Add New Event",
     icon: <MdOutlineEventAvailable size={22} color="grey" />,
   },
   {
-    href: "/dashboard/members/add",
+    href: ROUTE_PATH.DASHBOARD.MEMBER.ADD,
     name: "Add Members",
     icon: <BsPeople size={20} color="grey" />,
   },
   {
-    href: "/dashboard/sessions/add",
+    href: ROUTE_PATH.DASHBOARD.SESSION.ADD,
     name: "Add Session",
     icon: <BiMessageAltAdd size={22} color="grey" />,
   },
   {
-    href: "/dashboard/expense/add",
+    href: ROUTE_PATH.DASHBOARD.EXPENSE.ADD,
     name: "Add Expense",
     icon: <GiMoneyStack size={22} color="grey" />,
   },

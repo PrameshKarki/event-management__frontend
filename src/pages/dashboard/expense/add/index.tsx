@@ -9,6 +9,7 @@ import { CREATE_EXPENSE } from "../../../../graphql/mutations";
 import { UPDATE_EXPENSE } from "../../../../graphql/mutations/expense/expense.mutation";
 import { GET_ACCESSIBLE_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
+import { ROUTE_PATH } from "../../../../routes/route";
 
 interface IExpenseInput {
   eventID: string;
@@ -83,7 +84,7 @@ const AddExpense = () => {
           } successfully.`,
           variant: "success",
         });
-        router.push("/dashboard/events");
+        router.push(ROUTE_PATH.DASHBOARD.EVENT.ROOT);
       }
     } catch (err: any) {
       toast({

@@ -6,6 +6,7 @@ import { useToast } from "../../../../components/ui/use-toast";
 import client from "../../../../configs/graphql";
 import { CREATE_EVENT } from "../../../../graphql/mutations";
 import { UPDATE_EVENT } from "../../../../graphql/mutations/event/event.mutation";
+import { ROUTE_PATH } from "../../../../routes/route";
 import DashboardLayout from "../../Layout";
 
 interface IEventInput {
@@ -80,7 +81,7 @@ const AddEvent = () => {
           } successfully.`,
           variant: "success",
         });
-        router.push("/dashboard/events");
+        router.push(ROUTE_PATH.DASHBOARD.EVENT.ROOT);
       }
     } catch (err: any) {
       toast({

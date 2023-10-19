@@ -1,6 +1,7 @@
 import jwt_decode, { JwtPayload } from 'jwt-decode';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { ROUTE_PATH } from './routes/route';
 
 const LOGIN_ROUTE = "/auth/login";
 const AUTH_ROUTES = [LOGIN_ROUTE, "/auth/signup"]
@@ -8,7 +9,6 @@ const AUTH_ROUTES = [LOGIN_ROUTE, "/auth/signup"]
 export default function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl
     const token = req.cookies.get('token')?.value
-    console.log("🚀 ~ file: middleware.ts:11 ~ middleware ~ token:", token)
     let isAuthenticated = false
     const absoluteURL = new URL(LOGIN_ROUTE, req.nextUrl.origin)
     const rootURL = new URL("/", req.nextUrl.origin)
@@ -26,7 +26,7 @@ export default function middleware(req: NextRequest) {
             return NextResponse.redirect(absoluteURL.toString())
         }
     }
-    if (pathname.startsWith("/dashboard") && !isAuthenticated) {
+    if (pathname.startsWith(ROUTE_PATH.DASHBOARD.ROOT) && !isAuthenticated) {
         return NextResponse.redirect(absoluteURL.toString())
     }
     if (isAuthenticated && AUTH_ROUTES.includes(pathname)) {

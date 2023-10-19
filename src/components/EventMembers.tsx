@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 
+import { ROUTE_PATH } from "../routes/route";
 import { useToast } from "./ui/use-toast";
 
 const ALLOWED_ROLE = [
@@ -74,7 +75,7 @@ const EventMembers = ({
 
   const editHandler = (data: any) => {
     router.push({
-      pathname: `/dashboard/members/add`,
+      pathname: ROUTE_PATH.DASHBOARD.MEMBER.ADD,
       query: {
         event: eventID,
         disable: true,

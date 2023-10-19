@@ -5,7 +5,6 @@ import Cookies from 'universal-cookie';
 const authLink = setContext((_, { headers }) => {
     const cookies = new Cookies(null, { path: '/' });
     const token = cookies.get("token")
-    console.log("🚀 ~ file: graphql.ts:8 ~ authLink ~ token:", token)
     return {
         headers: {
             ...headers,

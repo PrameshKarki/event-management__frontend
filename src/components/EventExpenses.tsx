@@ -23,6 +23,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { useToast } from "./ui/use-toast";
+import { ROUTE_PATH } from "../routes/route";
 
 const EventExpenses = ({
   eventID,
@@ -80,7 +81,7 @@ const EventExpenses = ({
 
   const editHandler = (data: any) => {
     router.push({
-      pathname: `/dashboard/expense/add`,
+      pathname: ROUTE_PATH.DASHBOARD.EXPENSE.ADD,
       query: {
         event: eventID,
         disable: true,

@@ -6,6 +6,7 @@ import Cookies from "universal-cookie";
 import { useToast } from "../../components/ui/use-toast";
 import client from "../../configs/graphql";
 import { LOGIN_USER } from "../../graphql/mutations";
+import { ROUTE_PATH } from "../../routes/route";
 
 interface ILoginInput {
   email: string;
@@ -45,7 +46,7 @@ const Login = () => {
           sameSite: true,
           secure: true,
         });
-        router.push("/dashboard");
+        router.push(ROUTE_PATH.DASHBOARD.ROOT);
         toast({
           title: "Success",
           description: "Logged in successfully.",

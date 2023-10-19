@@ -7,6 +7,7 @@ import client from "../../../../configs/graphql";
 import { ADD_SESSION } from "../../../../graphql/mutations";
 import { UPDATE_SESSION } from "../../../../graphql/mutations/session/session.mutation";
 import { GET_ACCESSIBLE_EVENTS } from "../../../../graphql/queries";
+import { ROUTE_PATH } from "../../../../routes/route";
 import DashboardLayout from "../../Layout";
 
 interface ISessionInput {
@@ -82,7 +83,7 @@ const AddSession = () => {
           }successfully.`,
           variant: "success",
         });
-        router.push("/dashboard/events");
+        router.push(ROUTE_PATH.DASHBOARD.EVENT.ROOT);
       }
     } catch (err: any) {
       toast({

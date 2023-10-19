@@ -6,6 +6,7 @@ import client from "../configs/graphql";
 import { MemberRole } from "../constants";
 import { DELETE_SESSION } from "../graphql/mutations";
 import { GET_SESSIONS_OF_EVENT } from "../graphql/queries";
+import { ROUTE_PATH } from "../routes/route";
 import Table from "./Table";
 import {
   AlertDialog,
@@ -68,7 +69,7 @@ const EventSessions = ({
 
   const editHandler = (data: any) => {
     router.push({
-      pathname: `/dashboard/sessions/add`,
+      pathname: ROUTE_PATH.DASHBOARD.SESSION.ADD,
       query: {
         event: eventID,
         disable: true,
