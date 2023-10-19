@@ -8,7 +8,7 @@ import client from "../../../../configs/graphql";
 import { MemberRole } from "../../../../constants";
 import { ADD_MEMBERS_TO_THE_EVENT } from "../../../../graphql/mutations";
 import { UPDATE_MEMBER_TO_EVENT } from "../../../../graphql/mutations/member/member.mutation";
-import { GET_USERS, MY_EVENTS } from "../../../../graphql/queries";
+import { GET_ACCESSIBLE_EVENTS, GET_USERS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
 interface IMemberInput {
@@ -23,7 +23,7 @@ interface IAddMemberInput {
 
 const AddMember = () => {
   const router = useRouter();
-  const { data, loading, error } = useQuery(MY_EVENTS, {
+  const { data, loading, error } = useQuery(GET_ACCESSIBLE_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
@@ -118,7 +118,7 @@ const AddMember = () => {
     }
   };
 
-  const myEvents = data?.myEvents as Event[];
+  const myEvents = data?.getAccessibleEvents as Event[];
   const eligibleUsers = users?.users;
 
   return (
@@ -161,6 +161,8 @@ const AddMember = () => {
                 <select
                   {...register(`members.${index}.role`)}
                   className="block w-full bg-gray-100 px-2 py-3 my-2"
+                  value={!isEditMode ? router?.query?.role : undefined}
+                  disabled={!isEditMode && router?.query?.disable == "true"}
                 >
                   <option value="">Select Role</option>
                   {Object.keys(MemberRole)?.map((el) => {

@@ -6,7 +6,7 @@ import { useToast } from "../../../../components/ui/use-toast";
 import client from "../../../../configs/graphql";
 import { ADD_SESSION } from "../../../../graphql/mutations";
 import { UPDATE_SESSION } from "../../../../graphql/mutations/session/session.mutation";
-import { MY_EVENTS } from "../../../../graphql/queries";
+import { GET_ACCESSIBLE_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
 interface ISessionInput {
@@ -20,7 +20,7 @@ interface ISessionInput {
 const AddSession = () => {
   const router = useRouter();
   const isEditMode = router?.query?.mode === "edit";
-  const { data, loading, error } = useQuery(MY_EVENTS, {
+  const { data, loading, error } = useQuery(GET_ACCESSIBLE_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
@@ -93,7 +93,7 @@ const AddSession = () => {
     }
   };
 
-  const myEvents = data?.myEvents as Event[];
+  const myEvents = data?.getAccessibleEvents as Event[];
   return (
     <DashboardLayout>
       <h2 className="font-semibold text-xl mb-5">

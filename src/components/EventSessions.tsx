@@ -19,6 +19,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import { useToast } from "./ui/use-toast";
+const ALLOWED_ROLES = [MemberRole.ADMIN, MemberRole.OWNER];
 
 const EventSessions = ({
   eventID,
@@ -80,6 +81,7 @@ const EventSessions = ({
   let data = [];
   if (sessions?.getEventSessions?.length > 0) {
     data = sessions?.getEventSessions?.map((el: any) => {
+      if (!ALLOWED_ROLES.includes(role)) return el;
       return {
         ...el,
         action: (
@@ -131,11 +133,7 @@ const EventSessions = ({
         title="Sessions"
         keysToExclude={["__typename"]}
         loading={loading}
-        action={
-          [MemberRole.ADMIN, MemberRole.OWNER].includes(role)
-            ? "Add"
-            : undefined
-        }
+        action={ALLOWED_ROLES.includes(role) ? "Add" : undefined}
         onAction={() => {
           router.push(`/dashboard/sessions/add?event=${eventID}&disable=true`);
         }}

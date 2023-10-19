@@ -21,6 +21,11 @@ import {
 
 import { useToast } from "./ui/use-toast";
 
+const ALLOWED_ROLE = [
+  MemberRole.ADMIN,
+  MemberRole.OWNER,
+  MemberRole.CONTRIBUTOR,
+];
 const EventMembers = ({
   eventID,
   role,
@@ -83,6 +88,9 @@ const EventMembers = ({
 
   if (members?.data?.getMembersOfEvent?.length > 0) {
     data = members?.data?.getMembersOfEvent?.map((el: any) => {
+      if (!ALLOWED_ROLE.includes(role)) {
+        return el;
+      }
       return {
         ...el,
         action: (
@@ -133,13 +141,7 @@ const EventMembers = ({
         description="Members of event"
         title="Members"
         keysToExclude={["__typename"]}
-        action={
-          [MemberRole.ADMIN, MemberRole.OWNER, MemberRole.CONTRIBUTOR].includes(
-            role
-          )
-            ? "Add"
-            : undefined
-        }
+        action={ALLOWED_ROLE.includes(role) ? "Add" : undefined}
         onAction={() => {
           router.push(
             `/dashboard/members/add?event=${eventID}&disable=true&role=${

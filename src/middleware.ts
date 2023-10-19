@@ -11,6 +11,7 @@ export default function middleware(req: NextRequest) {
     console.log("🚀 ~ file: middleware.ts:11 ~ middleware ~ token:", token)
     let isAuthenticated = false
     const absoluteURL = new URL(LOGIN_ROUTE, req.nextUrl.origin)
+    const rootURL = new URL("/", req.nextUrl.origin)
 
     if (token) {
         try {
@@ -29,7 +30,7 @@ export default function middleware(req: NextRequest) {
         return NextResponse.redirect(absoluteURL.toString())
     }
     if (isAuthenticated && AUTH_ROUTES.includes(pathname)) {
-        return NextResponse.redirect("/")
+        return NextResponse.redirect(rootURL.toString())
     }
 
 

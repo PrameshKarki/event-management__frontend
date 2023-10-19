@@ -7,7 +7,7 @@ import client from "../../../../configs/graphql";
 import { ExpenseCategory } from "../../../../constants";
 import { CREATE_EXPENSE } from "../../../../graphql/mutations";
 import { UPDATE_EXPENSE } from "../../../../graphql/mutations/expense/expense.mutation";
-import { MY_EVENTS } from "../../../../graphql/queries";
+import { GET_ACCESSIBLE_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
 interface IExpenseInput {
@@ -22,7 +22,7 @@ const AddExpense = () => {
   const router = useRouter();
   const isEditMode = router?.query?.mode === "edit";
   const { toast } = useToast();
-  const { data, loading, error } = useQuery(MY_EVENTS, {
+  const { data, loading, error } = useQuery(GET_ACCESSIBLE_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
@@ -94,7 +94,7 @@ const AddExpense = () => {
     }
   };
 
-  const myEvents = data?.myEvents as Event[];
+  const myEvents = data?.getAccessibleEvents as Event[];
 
   return (
     <DashboardLayout>

@@ -5,9 +5,8 @@ import { useRouter } from "next/router";
 import { BiMessageAltAdd } from "react-icons/bi";
 import { BsCalendar4Event, BsPeople } from "react-icons/bs";
 import { GiMoneyStack } from "react-icons/gi";
-import { IoIosLogOut } from "react-icons/io";
 import { MdOutlineEventAvailable } from "react-icons/md";
-import Cookies from "universal-cookie";
+import Logout from "./Logout";
 
 const navigation = [
   {
@@ -60,11 +59,7 @@ const navigation = [
 
 const Sidebar = () => {
   const router = useRouter();
-  const logoutHandler = () => {
-    const cookies = new Cookies(null, { path: "/" });
-    cookies.remove("token");
-    router.push("/auth/login");
-  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 w-full h-full border-r bg-white space-y-8 sm:w-64">
@@ -109,14 +104,7 @@ const Sidebar = () => {
               </ul>
             </div>
           </div>
-          <div>
-            <button
-              onClick={logoutHandler}
-              className="bg-red-500 w-full text-white flex justify-center items-center py-2 mb-5"
-            >
-              <IoIosLogOut /> <p className="ml-2">Logout</p>
-            </button>
-          </div>
+          <Logout />
         </div>
       </nav>
     </>
