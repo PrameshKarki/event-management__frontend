@@ -34,7 +34,6 @@ const EventSessions = ({
       id: eventID,
     },
   });
-  let data = [];
 
   const [deleteSession] = useMutation(DELETE_SESSION, {
     client: client,
@@ -65,6 +64,7 @@ const EventSessions = ({
     }
   };
 
+  let data = [];
   if (sessions?.getEventSessions?.length > 0) {
     data = sessions?.getEventSessions?.map((el: any) => {
       return {

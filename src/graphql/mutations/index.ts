@@ -70,3 +70,13 @@ mutation DeleteSession($id:ID!){
     message
   }
 }`
+
+export const DELETE_EXPENSE = gql`
+mutation DeleteExpense($id:ID!){
+  deleteExpense(id:$id){
+    success
+    message
+  }
+}
+
+`

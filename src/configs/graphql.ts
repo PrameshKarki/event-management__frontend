@@ -4,7 +4,7 @@ import { setContext } from '@apollo/client/link/context';
 const authLink = setContext((_, { headers }) => {
     // WIP:
     // const token = localStorage.getItem('token')
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNjk3NjM3ODcyLCJpZCI6IjEifQ.kNDSTorOvYr1iB3xggfWgsZ6oNFuiJvgYmq0kmTPWgs'
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwiZXhwIjoxNjk3Njk4NDIyLCJpZCI6IjEifQ.sBsO7fzlLZjHeevie_PU5KeO4QW6zF9WasxbnyQ5BVU'
 
     return {
         headers: {
