@@ -1,12 +1,12 @@
-import client from "../../../../configs/graphql";
-import { useMutation } from "@apollo/client";
-import { CREATE_EVENT } from "../../../../graphql/mutations";
-import DashboardLayout from "../../Layout";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { useState } from "react";
-import { Calendar } from "../../../../components/ui/calendar";
-import { useToast } from "../../../../components/ui/use-toast";
+import { FetchResult, useMutation } from "@apollo/client";
+import dayjs from "dayjs";
 import { useRouter } from "next/router";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useToast } from "../../../../components/ui/use-toast";
+import client from "../../../../configs/graphql";
+import { CREATE_EVENT } from "../../../../graphql/mutations";
+import { UPDATE_EVENT } from "../../../../graphql/mutations/event/event.mutation";
+import DashboardLayout from "../../Layout";
 
 interface IEventInput {
   name: string;
@@ -17,9 +17,13 @@ interface IEventInput {
 }
 
 const AddEvent = () => {
-  const { toast } = useToast();
   const router = useRouter();
+  const isEditMode = router.query.mode === "edit";
+  const { toast } = useToast();
   const [createEvent] = useMutation(CREATE_EVENT, {
+    client: client,
+  });
+  const [updateEvent] = useMutation(UPDATE_EVENT, {
     client: client,
   });
   const {
@@ -28,15 +32,39 @@ const AddEvent = () => {
     watch,
     reset,
     formState: { errors },
-  } = useForm<IEventInput>();
+  } = useForm<IEventInput>({
+    defaultValues: {
+      name: (router?.query?.name as string) ?? "",
+      location: (router?.query?.location as string) ?? "",
+      description: (router?.query?.description as string) ?? "",
+      startDate: router?.query?.startDate
+        ? dayjs(router?.query?.startDate as string).format("YYYY-MM-DD")
+        : "",
+      endDate: router?.query?.endDate
+        ? dayjs(router?.query?.endDate as string).format("YYYY-MM-DD")
+        : "",
+    },
+  });
 
-  const addEventHandler: SubmitHandler<IEventInput> = async (data) => {
+  const eventHandler: SubmitHandler<IEventInput> = async (data) => {
     try {
-      const res = await createEvent({
-        variables: {
-          data,
-        },
-      });
+      let res: FetchResult<any>;
+
+      if (!isEditMode) {
+        res = await createEvent({
+          variables: {
+            data,
+          },
+        });
+      } else {
+        res = await updateEvent({
+          variables: {
+            data,
+            id: router.query.id,
+          },
+        });
+      }
+
       if (res.data) {
         reset({
           name: "",
@@ -47,7 +75,9 @@ const AddEvent = () => {
         });
         toast({
           title: "Success",
-          description: "Event created successfully.",
+          description: `Event ${
+            isEditMode ? "updated" : "created"
+          } successfully.`,
           variant: "success",
         });
         router.push("/dashboard/events");
@@ -63,12 +93,11 @@ const AddEvent = () => {
 
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Create new event</h2>
+      <h2 className="font-semibold text-xl mb-5">
+        {isEditMode ? "Edit Event" : "Create new event"}
+      </h2>
       <div>
-        <form
-          onSubmit={handleSubmit(addEventHandler)}
-          className="mt-8 space-y-5"
-        >
+        <form onSubmit={handleSubmit(eventHandler)} className="mt-8 space-y-5">
           <div>
             <label className="font-medium">Name</label>
             <input
@@ -125,7 +154,7 @@ const AddEvent = () => {
             type="submit"
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
           >
-            Create Event
+            {isEditMode ? "Update" : "Create"}
           </button>
         </form>
       </div>

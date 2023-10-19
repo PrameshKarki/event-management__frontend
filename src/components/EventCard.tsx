@@ -72,6 +72,17 @@ const EventCard = (props: IProps) => {
       });
     }
   };
+
+  const editHandler = () => {
+    router.push({
+      pathname: "/dashboard/events/add",
+      query: {
+        mode: "edit",
+        ...event,
+      },
+    });
+  };
+
   return (
     <>
       <div className="shadow-sm px-3 min-w-[250px] min-h-[150px]">
@@ -94,33 +105,41 @@ const EventCard = (props: IProps) => {
           </div>
         </Link>
 
-        {/* Delete Button */}
         {showActions && (
-          <AlertDialog>
-            <AlertDialogTrigger>
-              <button className="bg-red-600 text-sm text-white px-2 py-1 my-2">
-                Delete
-              </button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  className="bg-red-600 hover:bg-red-900"
-                  onClick={() => deleteEventHandler(event.id)}
-                >
-                  Continue
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <>
+            <button
+              onClick={editHandler}
+              className="bg-indigo-600 text-sm text-white px-2 py-1 m-2"
+            >
+              Edit
+            </button>
+            {/* Delete Button */}
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <button className="bg-red-600 text-sm text-white px-2 py-1 my-2">
+                  Delete
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-red-600 hover:bg-red-900"
+                    onClick={() => deleteEventHandler(event.id)}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
         )}
       </div>
     </>

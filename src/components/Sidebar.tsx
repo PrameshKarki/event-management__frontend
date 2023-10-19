@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { BiMessageAltAdd } from "react-icons/bi";
 import { BsCalendar4Event, BsPeople } from "react-icons/bs";
@@ -56,6 +57,7 @@ const navigation = [
 ];
 
 const Sidebar = () => {
+  const router = useRouter();
   return (
     <>
       <nav className="fixed top-0 left-0 w-full h-full border-r bg-white space-y-8 sm:w-64">
@@ -78,17 +80,24 @@ const Sidebar = () => {
           </div>
           <div className="overflow-auto">
             <ul className="text-sm font-medium flex-1">
-              {navigation.map((item, idx) => (
-                <li key={idx}>
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-x-2 text-gray-600 p-2 rounded-lg  hover:bg-gray-50 active:bg-gray-100 duration-150"
-                  >
-                    <div className="text-gray-500">{item.icon}</div>
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
+              {navigation.map((item, idx) => {
+                const isSelected = router.pathname === item.href;
+                const className = isSelected
+                  ? "bg-gray-100 active:bg-gray-100 duration-150"
+                  : "";
+
+                return (
+                  <li key={idx} className="my-3">
+                    <Link
+                      href={item.href}
+                      className={`flex items-center gap-x-2 text-gray-600 p-2 rounded-lg  hover:bg-gray-50 active:bg-gray-100 duration-150 ${className} }`}
+                    >
+                      <div className="text-gray-500">{item.icon}</div>
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </div>
