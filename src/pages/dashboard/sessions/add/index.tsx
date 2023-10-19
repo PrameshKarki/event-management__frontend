@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { FetchResult, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Event } from "../../../../components/EventCard";
 import { useToast } from "../../../../components/ui/use-toast";
 import client from "../../../../configs/graphql";
 import { ADD_SESSION } from "../../../../graphql/mutations";
+import { UPDATE_SESSION } from "../../../../graphql/mutations/session/session.mutation";
 import { MY_EVENTS } from "../../../../graphql/queries";
 import DashboardLayout from "../../Layout";
 
@@ -17,15 +18,18 @@ interface ISessionInput {
 }
 
 const AddSession = () => {
+  const router = useRouter();
+  const isEditMode = router?.query?.mode === "edit";
   const { data, loading, error } = useQuery(MY_EVENTS, {
     client: client,
     fetchPolicy: "network-only",
   });
 
   const { toast } = useToast();
-  const router = useRouter();
-  console.log("🚀 ~ file: index.tsx:27 ~ AddSession ~ router:", router.query);
   const [createSession] = useMutation(ADD_SESSION, {
+    client: client,
+  });
+  const [updateSession] = useMutation(UPDATE_SESSION, {
     client: client,
   });
   const {
@@ -37,18 +41,32 @@ const AddSession = () => {
   } = useForm<ISessionInput>({
     defaultValues: {
       eventID: (router?.query?.event as string) ?? "",
+      name: (router?.query?.name as string) ?? "",
+      description: (router?.query?.description as string) ?? "",
+      endTime: (router?.query?.endTime as string) ?? "",
+      startTime: (router?.query?.startTime as string) ?? "",
     },
   });
 
   const addSessionHandler: SubmitHandler<ISessionInput> = async (data) => {
     const { eventID, ...rest } = data;
+    let res: FetchResult<any>;
     try {
-      const res = await createSession({
-        variables: {
-          eventID: data.eventID,
-          data: rest,
-        },
-      });
+      if (!isEditMode) {
+        res = await createSession({
+          variables: {
+            eventID: data.eventID,
+            data: rest,
+          },
+        });
+      } else {
+        res = await updateSession({
+          variables: {
+            id: router?.query?.id,
+            data: rest,
+          },
+        });
+      }
       if (res.data) {
         reset({
           eventID: "",
@@ -59,7 +77,9 @@ const AddSession = () => {
         });
         toast({
           title: "Success",
-          description: "Session added successfully.",
+          description: `Session ${
+            isEditMode ? "updated " : "added "
+          }successfully.`,
           variant: "success",
         });
         router.push("/dashboard/events");
@@ -76,7 +96,9 @@ const AddSession = () => {
   const myEvents = data?.myEvents as Event[];
   return (
     <DashboardLayout>
-      <h2 className="font-semibold text-xl mb-5">Add Session</h2>
+      <h2 className="font-semibold text-xl mb-5">
+        {isEditMode ? "Update Session" : "Add New Session"}
+      </h2>
       <div>
         <form
           onSubmit={handleSubmit(addSessionHandler)}
@@ -148,7 +170,7 @@ const AddSession = () => {
             type="submit"
             className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
           >
-            Add Session
+            {isEditMode ? "Update" : "Create"}
           </button>
         </form>
       </div>
